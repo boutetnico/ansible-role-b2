@@ -13,7 +13,6 @@ galaxy_info:
     - name: Debian
       versions:
         - buster
-        - stretch
   galaxy_tags:
     - b2
     - backblaze

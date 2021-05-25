@@ -7,8 +7,6 @@ driver:
   name: docker
 
 platforms:
-  - name: ansible-role-b2-debian-9
-    image: debian:9
   - name: ansible-role-b2-debian-10
     image: debian:10
   - name: ansible-role-b2-ubuntu-1804

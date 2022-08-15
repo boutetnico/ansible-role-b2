@@ -1,17 +1,17 @@
 ---
 - name: Ensure pip is installed
-  package:
+  ansible.builtin.package:
     name: python{{ '3' if ansible_python.version.major == 3 else '' }}-pip
     state: present
     update_cache: true
 
 - name: Ensure b2 python package is installed
-  pip:
+  ansible.builtin.pip:
     name: b2
     state: present
 
 - name: Authorize Backblaze B2 application key
-  shell: b2 authorize-account {{ b2_application_key_id }} {{ b2_application_key }}
+  ansible.builtin.command: /usr/local/bin/b2 authorize-account {{ b2_application_key_id }} {{ b2_application_key }}
   changed_when: false
   when:
     - b2_application_key_id != ''

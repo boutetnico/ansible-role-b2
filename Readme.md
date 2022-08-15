@@ -9,7 +9,7 @@ This role installs and configures [Backblaze B2 command-line tool](https://b2-co
 Requirements
 ------------
 
-Ansible 2.7 or newer.
+Ansible 2.10 or newer.
 
 Supported Platforms
 -------------------

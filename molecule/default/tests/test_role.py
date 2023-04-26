@@ -16,5 +16,5 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     ],
 )
 def test_package_is_installed(host, name):
-    packages = host.pip_package.get_packages(pip_path="pip3")
+    packages = host.pip.get_packages(pip_path="pip3")
     assert name in packages

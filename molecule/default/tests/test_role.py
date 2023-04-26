@@ -5,12 +5,16 @@ import os
 import testinfra.utils.ansible_runner
 
 testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
-    os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
+    os.environ["MOLECULE_INVENTORY_FILE"]
+).get_hosts("all")
 
 
-@pytest.mark.parametrize('name', [
-  ('b2'),
-])
+@pytest.mark.parametrize(
+    "name",
+    [
+        ("b2"),
+    ],
+)
 def test_package_is_installed(host, name):
-    packages = host.pip_package.get_packages(pip_path='pip3')
+    packages = host.pip_package.get_packages(pip_path="pip3")
     assert name in packages

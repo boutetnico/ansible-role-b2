@@ -19,7 +19,7 @@ def test_package_is_installed(host, name):
     assert host.package(name).is_installed
 
 
-def test_b2_command_can_be_ran(host, user, roles):
+def test_b2_command_can_be_ran(host):
     output = host.run("b2 version")
     if output.exit_status != 0:
         pytest.fail("Failed to run b2")

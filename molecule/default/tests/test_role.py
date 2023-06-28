@@ -12,7 +12,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 @pytest.mark.parametrize(
     "name",
     [
-        ("b2"),
+        ("backblaze-b2"),
     ],
 )
 def test_package_is_installed(host, name):

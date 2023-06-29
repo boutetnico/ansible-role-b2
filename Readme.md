@@ -26,7 +26,6 @@ Role Variables
 |------------------------|----------|------------|-----------|---------------------------------------|
 | b2_application_key_id  | true     | `''`       | string    |                                       |
 | b2_application_key     | true     | `''`       | string    |                                       |
-| b2_package_pip_install | true     | `false`    | bool      | Use `true` to install `b2` using pip. |
 | b2_package_state       | true     | `present`  | string    | Use `latest` to upgrade.              |
 
 Dependencies

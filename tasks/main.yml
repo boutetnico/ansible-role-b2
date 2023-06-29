@@ -1,44 +1,23 @@
 ---
-- name: Install b2 using pip
-  when: b2_package_pip_install
-  block:
-    - name: Ensure backblaze-b2 package is not installed
-      ansible.builtin.package:
-        name: backblaze-b2
-        state: absent
+- name: Ensure backblaze-b2 package is not installed
+  ansible.builtin.package:
+    name: backblaze-b2
+    state: absent
 
-    - name: Ensure pip is installed
-      ansible.builtin.package:
-        name: python3-pip
-        state: present
-        update_cache: true
+- name: Ensure pip is installed
+  ansible.builtin.package:
+    name: python3-pip
+    state: present
+    update_cache: true
 
-    - name: Ensure b2 python package is installed
-      ansible.builtin.pip:
-        name: b2
-        state: "{{ b2_package_state }}"
-
-- name: Install b2 using apt
-  when: not b2_package_pip_install
-  block:
-    - name: Gather facts about installed packages
-      ansible.builtin.package_facts:
-        manager: auto
-
-    - name: Ensure b2 python package is not installed if pip is installed
-      ansible.builtin.pip:
-        name: b2
-        state: absent
-      when: "'python3-pip' in ansible_facts.packages"
-
-    - name: Ensure backblaze-b2 package is installed
-      ansible.builtin.package:
-        name: backblaze-b2
-        state: "{{ b2_package_state }}"
-        update_cache: true
+- name: Ensure b2 python package is installed
+  ansible.builtin.pip:
+    name: b2
+    state: "{{ b2_package_state }}"
+    extra_args: --break-system-packages
 
 - name: Authorize Backblaze B2 application key
-  ansible.builtin.command: /usr/bin/backblaze-b2 authorize-account {{ b2_application_key_id }} {{ b2_application_key }}
+  ansible.builtin.command: /usr/bin/b2 authorize-account {{ b2_application_key_id }} {{ b2_application_key }}
   changed_when: false
   when:
     - b2_application_key_id != ''

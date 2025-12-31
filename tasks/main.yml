@@ -12,16 +12,9 @@
 
 - name: Ensure b2 python package is installed
   ansible.builtin.pip:
+    break_system_packages: true
     name: b2
     state: "{{ b2_package_state }}"
-    extra_args: --break-system-packages
-  when: ansible_facts['distribution_release'] in ['bookworm', 'noble']
-
-- name: Ensure b2 python package is installed
-  ansible.builtin.pip:
-    name: b2
-    state: "{{ b2_package_state }}"
-  when: not ansible_facts['distribution_release'] in ['bookworm', 'noble']
 
 - name: Authorize Backblaze B2 application key
   ansible.builtin.command: /usr/bin/b2 authorize-account {{ b2_application_key_id }} {{ b2_application_key }}

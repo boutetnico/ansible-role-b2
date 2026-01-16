@@ -19,6 +19,7 @@
 - name: Authorize Backblaze B2 application key
   ansible.builtin.command: /usr/bin/b2 authorize-account {{ b2_application_key_id }} {{ b2_application_key }}
   changed_when: false
+  no_log: true
   when:
     - b2_application_key_id != ''
     - b2_application_key != ''

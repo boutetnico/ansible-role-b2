@@ -4,7 +4,7 @@
 ansible-role-b2
 ===============
 
-This role installs and configures [Backblaze B2 command-line tool](https://b2-command-line-tool.readthedocs.io/en/master/).
+This role installs and configures [Backblaze B2 command-line tool](https://b2-command-line-tool.readthedocs.io/en/master/) using the standalone binary from [GitHub releases](https://github.com/Backblaze/B2_Command_Line_Tool/releases).
 
 Requirements
 ------------
@@ -22,11 +22,11 @@ Supported Platforms
 Role Variables
 --------------
 
-| Variable               | Required | Default    | Choices   | Comments                              |
-|------------------------|----------|------------|-----------|---------------------------------------|
-| b2_application_key_id  | true     | `''`       | string    |                                       |
-| b2_application_key     | true     | `''`       | string    |                                       |
-| b2_package_state       | true     | `present`  | string    | Use `latest` to upgrade.              |
+| Variable               | Required | Default    | Choices   | Comments                                 |
+|------------------------|----------|------------|-----------|------------------------------------------|
+| b2_application_key_id  | true     | `''`       | string    |                                          |
+| b2_application_key     | true     | `''`       | string    |                                          |
+| b2_version             | true     | `4.6.0`    | string    | Version to install from GitHub releases. |
 
 Dependencies
 ------------
@@ -39,6 +39,7 @@ Example Playbook
     - hosts: all
       roles:
         - role: ansible-role-b2
+          b2_version: 4.6.0
 
 Testing
 -------

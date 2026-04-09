@@ -1,40 +1,28 @@
 import pytest
 
 
-@pytest.mark.parametrize(
-    "name",
-    [
-        ("python3-pip"),
-    ],
-)
-def test_dependencies_are_installed(host, name):
-    package = host.package(name)
-    assert package.is_installed
+@pytest.fixture()
+def b2_version(host):
+    defaults = host.ansible("include_vars", "../../defaults/main.yml")["ansible_facts"]
+    return defaults["b2_version"]
 
 
-def test_backblaze_b2_package_is_not_installed(host):
-    package = host.package("backblaze-b2")
-    assert not package.is_installed
-
-
-@pytest.mark.parametrize(
-    "name",
-    [
-        ("b2"),
-    ],
-)
-def test_pip_package_is_installed(host, name):
-    packages = host.pip.get_packages(pip_path="pip3")
-    assert name in packages
+def test_b2_binary_exists(host):
+    b2 = host.file("/usr/local/bin/b2")
+    assert b2.exists
+    assert b2.mode == 0o755
 
 
 def test_b2_command_is_available(host):
-    cmd = host.run("b2 version")
+    cmd = host.run("/usr/local/bin/b2 version")
     assert cmd.rc == 0
-    assert "b2 command line tool" in cmd.stdout
+
+
+def test_b2_version_matches(host, b2_version):
+    cmd = host.run("/usr/local/bin/b2 version")
+    assert b2_version in cmd.stdout
 
 
 def test_b2_help_command_works(host):
-    cmd = host.run("b2 --help")
+    cmd = host.run("/usr/local/bin/b2 --help")
     assert cmd.rc == 0
-    assert "b2 [-h]" in cmd.stdout or "b2 [" in cmd.stdout

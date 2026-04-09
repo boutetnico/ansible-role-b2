@@ -1,23 +1,37 @@
 ---
-- name: Ensure backblaze-b2 package is not installed
-  ansible.builtin.package:
-    name: backblaze-b2
-    state: absent
+- name: Set b2 binary name based on architecture
+  ansible.builtin.set_fact:
+    _b2_binary: "{{ 'b2-linux-aarch64' if ansible_facts['architecture'] == 'aarch64' else 'b2-linux' }}"
 
-- name: Ensure pip is installed
-  ansible.builtin.package:
-    name: python3-pip
-    state: present
-    update_cache: true
+- name: Check current b2 version
+  ansible.builtin.command: /usr/local/bin/b2 version
+  register: _b2_current_version
+  changed_when: false
+  failed_when: false
 
-- name: Ensure b2 python package is installed
-  ansible.builtin.pip:
-    break_system_packages: true
-    name: b2
-    state: "{{ b2_package_state }}"
+- name: Download b2 checksum file
+  ansible.builtin.uri:
+    url: "https://github.com/Backblaze/B2_Command_Line_Tool/releases/download/v{{ b2_version }}/{{ _b2_binary }}_hashes.txt"
+    return_content: true
+  register: _b2_hashes
+  when: b2_version not in (_b2_current_version.stdout | default(''))
+
+- name: Extract b2 sha256 checksum
+  ansible.builtin.set_fact:
+    _b2_checksum: "sha256:{{ _b2_hashes.content | regex_search('sha256\\s+(\\S+)', '\\1') | first }}"
+  when: b2_version not in (_b2_current_version.stdout | default(''))
+
+- name: Download b2 binary
+  ansible.builtin.get_url:
+    url: "https://github.com/Backblaze/B2_Command_Line_Tool/releases/download/v{{ b2_version }}/{{ _b2_binary }}"
+    dest: /usr/local/bin/b2
+    checksum: "{{ _b2_checksum }}"
+    mode: "0755"
+    force: true
+  when: b2_version not in (_b2_current_version.stdout | default(''))
 
 - name: Authorize Backblaze B2 application key
-  ansible.builtin.command: /usr/bin/b2 account authorize {{ b2_application_key_id }} {{ b2_application_key }}
+  ansible.builtin.command: /usr/local/bin/b2 account authorize {{ b2_application_key_id }} {{ b2_application_key }}
   changed_when: false
   no_log: true
   when:

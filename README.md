@@ -26,7 +26,7 @@ Role Variables
 |------------------------|----------|------------|-----------|------------------------------------------|
 | b2_application_key_id  | true     | `''`       | string    |                                          |
 | b2_application_key     | true     | `''`       | string    |                                          |
-| b2_version             | true     | `4.6.0`    | string    | Version to install from GitHub releases. |
+| b2_version             | true     | `5.0.0`    | string    | Version to install from GitHub releases. |
 
 Dependencies
 ------------
@@ -39,7 +39,7 @@ Example Playbook
     - hosts: all
       roles:
         - role: ansible-role-b2
-          b2_version: 4.6.0
+          b2_version: 5.0.0
 
 Testing
 -------
